@@ -1,0 +1,68 @@
+<!-- داخل قسم الطلبات في index.html -->
+<label>طريقة الدفع:</label>
+<select id="paymentMethod" required>
+  <option value="bankak">بنكك</option>
+  <option value="binance">Binance</option>
+  <option value="mtnmomo">MTN MoMo - جنوب السودان</option>
+</select>
+document.getElementById("orderForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  let name = document.getElementById("fullName").value;
+  let email = document.getElementById("email").value;
+  let phone = document.getElementById("phone").value;
+  let service = document.getElementById("serviceType").value;
+  let device = document.getElementById("deviceNumber").value;
+  let payment = document.getElementById("paymentMethod").value;
+
+  // رسالة تأكيد الطلب
+  let message = `
+تم استلام طلبك بنجاح!✔️
+الخدمة: ${service}
+الجهاز/IMEI: ${device}
+طريقة الدفع: ${payment}
+سنتواصل معك عبر البريد: ${email} أو الواتساب: ${phone}
+`;
+
+  // عرض الرسالة على الصفحة
+  document.getElementById("orderMessage").textContent = message;
+
+  // (هنا يمكنك إضافة كود لإرسال الطلب عبر API إلى بريدك أو خدمة واتساب إذا كنت تستخدم خدمات مثل Twilio)
+
+});// إضافة أكواد بسيطة في script.js لعرض الطلبات في admin.html
+let orders = [];
+
+document.getElementById("orderForm").addEventListener("submit", function(e) {
+  // ... (الكود السابق)
+  
+  // إضافة الطلب للorders
+  orders.push({
+    name,
+    email,
+    phone,
+    service,
+    device,
+    payment
+  });
+
+  // تحديث عرض الطلبات في صفحة الإدارة إذا كانت مفتوحة
+  if (document.getElementById("orders")) {
+    let ordersContainer = document.getElementById("orders");
+    ordersContainer.innerHTML = ""; // مسح الطلبات القديمة
+
+    orders.forEach(order => {
+      let orderElement = document.createElement("div");
+      orderElement.classList.add("order");
+      orderElement.innerHTML = `
+        <h4>طلب جديد</h4>
+        <p><strong>الاسم:</strong> ${order.name}</p>
+        <p><strong>الخدمة:</strong> ${order.service}</p>
+        <p><strong>الجهاز/IMEI:</strong> ${order.device}</p>
+        <p><strong>طريقة الدفع:</strong> ${order.payment}</p>
+        <p><strong>البريد:</strong> ${order.email}</p>
+        <p><strong>الواتساب:</strong> ${order.phone}</p>
+      `;
+      ordersContainer.appendChild(orderElement);
+    });
+  }
+});
